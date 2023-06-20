@@ -1,7 +1,10 @@
-import { wait } from "../../utils";
+import { test, expect } from "@/fixtures";
+// import { wait } from "../../utils";
 
-test("should set crossOrigin to anonymous for script tag correctly", async () => {
-	await wait(50);
+test("should set crossOrigin to anonymous for script tag correctly", async ({
+	page
+}) => {
+	//	await wait(50);
 	const scripts = await page.$$("script");
 
 	const crossOrigins = await Promise.all(
