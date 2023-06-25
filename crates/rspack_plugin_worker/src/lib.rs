@@ -5,3 +5,5 @@ pub struct WorkerPlugin {}
 
 #[async_trait::async_trait]
 impl Plugin for WorkerPlugin {}
+
+pub struct WorkerDependency {}

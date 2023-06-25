@@ -59,6 +59,8 @@ pub enum DependencyType {
   CjsRequire,
   // new URL("./foo", import.meta.url)
   NewUrl,
+  // new Worker()
+  NewWorker,
   // import.meta.webpackHot.accept
   ImportMetaHotAccept,
   // import.meta.webpackHot.decline
@@ -102,6 +104,7 @@ impl Display for DependencyType {
       DependencyType::DynamicImport => write!(f, "dynamic import"),
       DependencyType::CjsRequire => write!(f, "cjs require"),
       DependencyType::NewUrl => write!(f, "new URL()"),
+      DependencyType::NewWorker => write!(f, "new Worker()"),
       DependencyType::ImportMetaHotAccept => write!(f, "import.meta.webpackHot.accept"),
       DependencyType::ImportMetaHotDecline => write!(f, "import.meta.webpackHot.decline"),
       DependencyType::ModuleHotAccept => write!(f, "module.hot.accept"),
@@ -132,6 +135,7 @@ pub enum DependencyCategory {
   CssImport,
   CssCompose,
   Wasm,
+  Worker,
 }
 
 impl From<&str> for DependencyCategory {
@@ -158,6 +162,7 @@ impl Display for DependencyCategory {
       DependencyCategory::CssImport => write!(f, "css-import"),
       DependencyCategory::CssCompose => write!(f, "css-compose"),
       DependencyCategory::Wasm => write!(f, "wasm"),
+      DependencyCategory::Worker => write!(f, "worker"),
     }
   }
 }
@@ -365,6 +370,9 @@ pub type BoxDependency = Box<dyn Dependency>;
 
 pub fn is_async_dependency(dep: &BoxModuleDependency) -> bool {
   if matches!(dep.dependency_type(), DependencyType::DynamicImport) {
+    return true;
+  }
+  if matches!(dep.dependency_type(), DependencyType::NewWorker) {
     return true;
   }
   if matches!(dep.dependency_type(), DependencyType::ContextElement) {

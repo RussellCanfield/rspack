@@ -23,6 +23,14 @@ impl Visit for UrlScanner<'_> {
   noop_visit_type!();
 
   fn visit_new_expr(&mut self, new_expr: &NewExpr) {
+    // TODO: looks wired but work
+    if let Expr::Ident(Ident {
+      sym: js_word!("Worker"),
+      ..
+    }) = &*new_expr.callee
+    {
+      return;
+    }
     if let Expr::Ident(Ident {
       sym: js_word!("URL"),
       ..

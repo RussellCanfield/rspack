@@ -17,6 +17,7 @@ mod require_context_scanner;
 mod scanner;
 mod url_scanner;
 mod util;
+mod worker_scanner;
 pub use code_generation::*;
 use rspack_core::{
   ast::javascript::Program, BuildInfo, BuildMeta, BuildMetaExportsType,
@@ -36,7 +37,7 @@ use self::{
   new_common_js_scanner::NewCommonJsScanner, new_import_meta_scanner::NewImportMetaScanner,
   new_node_stuff_scanner::NewNodeStuffScanner, node_stuff_scanner::NodeStuffScanner,
   require_context_scanner::RequireContextScanner, scanner::DependencyScanner,
-  url_scanner::UrlScanner,
+  url_scanner::UrlScanner, worker_scanner::WorkerScanner,
 };
 
 pub type ScanDependenciesResult = (
@@ -188,6 +189,7 @@ pub fn scan_dependencies_with_string_replace(
       &mut import_map,
       module_identifier,
     ));
+    program.visit_with(&mut WorkerScanner::new(&mut dependencies));
     program.visit_with(&mut UrlScanner::new(&mut dependencies));
     program.visit_with(&mut NewImportMetaScanner::new(
       &mut code_replace_source_dependencies,
