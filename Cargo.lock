@@ -2836,6 +2836,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "rspack_plugin_worker"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "dashmap",
+ "rayon",
+ "rspack_core",
+ "rspack_error",
+ "rspack_identifier",
+ "rspack_plugin_runtime",
+ "serde_json",
+]
+
+[[package]]
 name = "rspack_regex"
 version = "0.1.0"
 dependencies = [
