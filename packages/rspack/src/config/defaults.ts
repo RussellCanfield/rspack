@@ -485,6 +485,30 @@ const applyOutputDefaults = (
 		}
 		return false;
 	});
+	F(output, "workerChunkLoading", () => {
+		if (tp) {
+			switch (output.chunkFormat) {
+				case "array-push":
+					if (tp.importScriptsInWorker) return "import-scripts";
+					break;
+				case "commonjs":
+					if (tp.require) return "require";
+					if (tp.nodeBuiltins) return "async-node";
+					break;
+				case "module":
+					if (tp.dynamicImportInWorker) return "import";
+					break;
+			}
+			if (
+				tp.require === null ||
+				tp.nodeBuiltins === null ||
+				tp.importScriptsInWorker === null
+			) {
+				return "universal";
+			}
+		}
+		return false;
+	});
 	F(output, "wasmLoading", () => {
 		if (tp) {
 			if (tp.fetchWasm) return "fetch";
@@ -538,9 +562,9 @@ const applyOutputDefaults = (
 		if (output.chunkLoading) {
 			enabledChunkLoadingTypes.add(output.chunkLoading);
 		}
-		// if (output.workerChunkLoading) {
-		// 	enabledChunkLoadingTypes.add(output.workerChunkLoading);
-		// }
+		if (output.workerChunkLoading) {
+			enabledChunkLoadingTypes.add(output.workerChunkLoading);
+		}
 		forEachEntry(desc => {
 			if (desc.chunkLoading) {
 				enabledChunkLoadingTypes.add(desc.chunkLoading);

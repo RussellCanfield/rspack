@@ -48,6 +48,7 @@ pub struct OutputOptions {
   pub hash_digest_length: usize,
   pub hash_salt: HashSalt,
   pub async_chunks: bool,
+  pub worker_chunk_loading: ChunkLoading,
 }
 
 impl From<&OutputOptions> for RspackHash {
@@ -63,7 +64,21 @@ pub struct TrustedTypes {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ChunkLoading {
-  False,
+  Enable(ChunkLoadingType),
+  Disable,
+}
+
+impl From<&str> for ChunkLoading {
+  fn from(value: &str) -> Self {
+    match value {
+      "false" => ChunkLoading::Disable,
+      v => ChunkLoading::Enable(v.into()),
+    }
+  }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ChunkLoadingType {
   Jsonp,
   ImportScripts,
   Require,
@@ -72,7 +87,7 @@ pub enum ChunkLoading {
   // TODO: Custom
 }
 
-impl From<&str> for ChunkLoading {
+impl From<&str> for ChunkLoadingType {
   fn from(value: &str) -> Self {
     match value {
       "jsonp" => Self::Jsonp,
@@ -80,7 +95,6 @@ impl From<&str> for ChunkLoading {
       "require" => Self::Require,
       "async-node" => Self::AsyncNode,
       "import" => Self::Import,
-      "false" => Self::False,
       _ => unimplemented!("custom chunkLoading in not supported yet"),
     }
   }
@@ -90,6 +104,15 @@ impl From<&str> for ChunkLoading {
 pub enum WasmLoading {
   Enable(WasmLoadingType),
   Disable,
+}
+
+impl From<&str> for WasmLoading {
+  fn from(value: &str) -> Self {
+    match value {
+      "false" => Self::Disable,
+      v => Self::Enable(v.into()),
+    }
+  }
 }
 
 #[derive(Debug)]

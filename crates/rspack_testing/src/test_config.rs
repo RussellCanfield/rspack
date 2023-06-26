@@ -415,7 +415,7 @@ impl TestConfig {
           .expect("Should exist"),
         public_path: c::PublicPath::String("/".to_string()),
         unique_name: "__rspack_test__".to_string(),
-        chunk_loading: c::ChunkLoading::Jsonp,
+        chunk_loading: c::ChunkLoading::Enable(c::ChunkLoadingType::Jsonp),
         chunk_loading_global: "webpackChunkwebpack".to_string(),
         path: context.join("dist"),
         library: self.output.library.map(|l| c::LibraryOptions {
@@ -439,6 +439,7 @@ impl TestConfig {
         hash_digest_length: 16,
         hash_salt: c::HashSalt::None,
         async_chunks: true,
+        worker_chunk_loading: c::ChunkLoading::Enable(c::ChunkLoadingType::ImportScripts),
       },
       mode: c::Mode::from(self.mode),
       target: c::Target::new(&self.target).expect("Can't construct target"),

@@ -6,6 +6,10 @@ function chunkLoadingType() {
 		.or(z.string());
 }
 
+function chunkLoading() {
+	return z.literal(false).or(chunkLoadingType());
+}
+
 function wasmLoadingType() {
 	return z.enum(["...", "fetch-streaming", "fetch", "async-node"]);
 }
@@ -58,7 +62,7 @@ export function output() {
 			.enum(["array-push", "commonjs", "module"])
 			.or(z.literal(false))
 			.optional(),
-		chunkLoading: z.literal(false).or(chunkLoadingType()).optional(),
+		chunkLoading: chunkLoading().optional(),
 		enabledChunkLoadingTypes: chunkLoadingType().array().optional(),
 		chunkFilename: z.string().optional(),
 		cssChunkFilename: z.string().optional(),
@@ -93,6 +97,7 @@ export function output() {
 		hashDigest: z.any().optional(),
 		hashDigestLength: z.any().optional(),
 		library: z.any().optional(),
-		asyncChunks: z.boolean().optional()
+		asyncChunks: z.boolean().optional(),
+		workerChunkLoading: chunkLoading().optional()
 	});
 }

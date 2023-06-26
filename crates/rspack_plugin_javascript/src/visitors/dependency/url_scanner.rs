@@ -7,6 +7,7 @@ use swc_core::ecma::{
 };
 
 use super::expr_matcher;
+use super::worker_scanner::parse_new_worker;
 use crate::dependency::NewURLDependency;
 pub struct UrlScanner<'a> {
   pub dependencies: &'a mut Vec<Box<dyn ModuleDependency>>,
@@ -23,12 +24,8 @@ impl Visit for UrlScanner<'_> {
   noop_visit_type!();
 
   fn visit_new_expr(&mut self, new_expr: &NewExpr) {
-    // TODO: looks wired but work
-    if let Expr::Ident(Ident {
-      sym: js_word!("Worker"),
-      ..
-    }) = &*new_expr.callee
-    {
+    // TODO: https://github.com/web-infra-dev/rspack/discussions/3619
+    if parse_new_worker(new_expr).is_some() {
       return;
     }
     if let Expr::Ident(Ident {

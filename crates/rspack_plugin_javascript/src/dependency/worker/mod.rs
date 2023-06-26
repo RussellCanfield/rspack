@@ -121,7 +121,8 @@ impl CodeReplaceSourceDependency for WorkerDependency {
       self.start,
       self.end,
       format!(
-        "/* worker import */ {}({}), {}",
+        "/* worker import */{} + {}({}), {}",
+        RuntimeGlobals::PUBLIC_PATH,
         RuntimeGlobals::GET_CHUNK_SCRIPT_FILENAME,
         chunk_id,
         RuntimeGlobals::BASE_URI

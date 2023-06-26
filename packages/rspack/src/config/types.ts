@@ -142,6 +142,7 @@ export interface Output {
 	hashFunction?: HashFunction;
 	hashSalt?: HashSalt;
 	asyncChunks?: boolean;
+	workerChunkLoading?: ChunkLoading;
 }
 export type Path = string;
 export type PublicPath = "auto" | RawPublicPath;
@@ -257,6 +258,7 @@ export interface OutputNormalized {
 	hashFunction?: HashFunction;
 	hashSalt?: HashSalt;
 	asyncChunks?: boolean;
+	workerChunkLoading?: ChunkLoading;
 }
 
 ///// Resolve /////

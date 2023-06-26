@@ -189,7 +189,11 @@ pub fn scan_dependencies_with_string_replace(
       &mut import_map,
       module_identifier,
     ));
-    program.visit_with(&mut WorkerScanner::new(&mut dependencies));
+    program.visit_with(&mut WorkerScanner::new(
+      &mut dependencies,
+      &module_identifier,
+      &compiler_options.output,
+    ));
     program.visit_with(&mut UrlScanner::new(&mut dependencies));
     program.visit_with(&mut NewImportMetaScanner::new(
       &mut code_replace_source_dependencies,
